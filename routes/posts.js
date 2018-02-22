@@ -69,7 +69,7 @@ router.get('/create', checkLogin, function (req, res, next) {
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
-  console.log('req.params.postId ' + req.params.postId)
+  // console.log('req.params.postId ' + req.params.postId)
   const postId = req.params.postId
   Promise.all([
     PostModel.getPostById(postId), // 获取文章信息
@@ -77,7 +77,7 @@ router.get('/:postId', function (req, res, next) {
     PostModel.incPv(postId) // pv加1
   ])
     .then(function (result) {
-      console.log('result' + JSON.stringify(result))
+      // console.log('result' + JSON.stringify(result))
       const post = result[0]
       const comments = result[1]
       // console.log('post' + JSON.stringify(result[0]))
