@@ -9,9 +9,15 @@ module.exports = function (app) {
     res.redirect('./posts')
   })
 
-  app.use('/signup', require('./signup'))
-  app.use('/signin', require('./signin'))
-  app.use('/signout', require('./signout'))
-  app.use('/posts', require('./posts'))
-  app.use('/comments', require('./comments'))
+  app.use('/signup', require('./signup')) // 登录
+  app.use('/signin', require('./signin')) // 注册
+  app.use('/signout', require('./signout')) // 登出
+  app.use('/posts', require('./posts')) // 发表文章
+  app.use('/comments', require('./comments')) // 留言
+  // 404页面
+  app.use(function (req, res) {
+    if (!res.headersSent) {
+      res.status(404).render('404')
+    }
+  })
 }

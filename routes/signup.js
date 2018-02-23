@@ -13,7 +13,7 @@ const checkNotLogin = require('../middlewares/check').checkNotLogin
 
 //  /signup 注册页
 router.get('/', function (req, res, next) {
-  console.log('进来注册页了')
+  // console.log('进来注册页了')
   res.render('signup')
 })
 
@@ -73,7 +73,7 @@ router.post('/', function (req, res, next) {
 
   UserModel.create(user)
     .then(function (result) {
-      console.log('userRESULT' + JSON.stringify(result))
+      // console.log('userRESULT' + JSON.stringify(result))
       user = result.ops[0]
       delete user.password
       req.session.user = user
