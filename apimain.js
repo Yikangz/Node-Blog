@@ -6,6 +6,8 @@ const router = require('./routes')
 const flash = require('connect-flash')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const winston = require('winston') // 记录日志
+const expressWinston = require('express-winston') // 记录日志
 config.readfile() // 初始化加载配置文件
 
 // 设置模版引擎
@@ -52,21 +54,45 @@ app.use(function (req, res, next) {
   next()
 })
 
+// 正常请求的日志
+app.use(expressWinston.logger({
+  transports: [
+    new (winston.transports.Console)({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/success.log'
+    })
+  ]
+}))
 // 路由
 router(app)
 
-// app.use(function(req,res,next){
-//     var err = new Error('请求异常');
-//     err.status = 404;
-//     next(err);//如果使用了 next(error)，则会返回错误而不会传递到下一个中间件
-// });
+// 错误请求的日志
+app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/error.log'
+    })
+  ]
+}))
+/*
+app.use(function (req, res, next) {
+  var err = new Error('请求异常')
+  err.status = 404
+  next(err)// 如果使用了 next(error)，则会返回错误而不会传递到下一个中间件
+}) */
 
-// 手动创建一个错误处理
-app.use(function (err, req, res, next) {
-  console.error(err.stack)
+/* app.use(function (err, req, res, next) {
+  // console.error(err)
   req.flash('error', err.message)
-  res.redirect('/post')
-})
+  res.redirect('/posts')
+}) */
 
 console.log('监听端口：' + config.get('app').main.httpPort)
 // 监听端口

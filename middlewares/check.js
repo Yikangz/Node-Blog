@@ -6,7 +6,7 @@ module.exports = {
     if (!req.session.user) {
       // session里面没有用户
       console.log('用户未登录')
-      req.flash('error', '用户未登录')
+      req.flash('error', '请登陆')
       return res.redirect('/signin') // 重定向去登录
     };
     next()
